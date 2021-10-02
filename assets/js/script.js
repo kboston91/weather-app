@@ -1,5 +1,6 @@
 var forecastDiv = document.querySelector(".five-day");
 
+
 $("#search-button").on("click", function () {
   var searchValue = $("#city-search").val();
   console.log(searchValue);
@@ -20,7 +21,7 @@ let forecastFunction = function (forecastData) {
   for (let i = 0; i < 5; i++) {
     let colDiv = $(`<div id="colDiv">`).addClass("col my-1 p-1");
 
-    let cardDiv = $(`<div id="cardDiv-5">`)
+    let cardDiv = $(`<div id="cardDiv">`)
       .addClass("card border col bg-secondary")
       .css({ height: "200px" });
 
@@ -39,21 +40,32 @@ let forecastFunction = function (forecastData) {
     cardTemp.text("Temp:" + forecastData[i].temp.max + "°F");
 
     let cardIcon = $(`<div id="cardIcon">`).addClass("card-icon");
-    cardIcon.val(forecastData[i].weather.icon);
-    console.log(forecastData[i].weather.icon]);
+    cardIcon.val(forecastData[i].weather[0].icon);
+
+    var iconCode = forecastData[i].weather[0].icon;
+    var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+
+    let iconImg = $(`<img id="icon" src="" alt="weather icon">`);
+    
+    $('#icon').attr('src', iconUrl);
 
     let cardWind = $(`<div id="cardWind">`).addClass("card-wind");
     cardWind.text("Wind:" + forecastData[i].wind_speed);
 
     let cardHumidity = $(`<div id="cardHumidity">`).addClass("card-humidity");
     cardHumidity.text("Humidity:" + forecastData[i].humidity);
+
+    let cardUV = $(`<div id="cardUV">`).addClass("card-uv");
+    cardUV.text("UV Index:" + forecastData[i].uvi);
     // let eventImageEl = $(`<img id="eventImg-5">`).addClass('card-img');
     // eventImageEl.attr('src', eventImgUrl);
     cardBody.append(cardTitle);
+    cardIcon.append(iconImg);
     cardBody.append(cardIcon);
     cardBody.append(cardTemp);
     cardBody.append(cardWind);
     cardBody.append(cardHumidity);
+    cardBody.append(cardUV);
 
     cardDiv.append(cardBody);
 
