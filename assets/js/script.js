@@ -15,7 +15,25 @@ $("#search-button").on("click", function () {
       console.log(data);
       fetchWeather(data[0]);
     });
+
+    
+    renderHistory();
 });
+
+function renderHistory() {
+  // Retrieve the last email and password from localStorage using `getItem()`
+  var city = localStorage.getItem('city');
+  
+
+  // If they are null, return early from this function
+  if (city === null) {
+    return;
+  }
+
+  // Set the text of the 'userEmailSpan' and 'userPasswordSpan' to the corresponding values from localStorage
+  history.textContent = city;
+  
+};
 
 let forecastFunction = function (forecastData) {
   for (let i = 0; i < 5; i++) {
@@ -25,7 +43,7 @@ let forecastFunction = function (forecastData) {
       .addClass("card border col bg-secondary")
       .css({ height: "200px" });
 
-    let cardBody = $(`<div id="cardBody">`).addClass("card-body");
+    let cardBody = $(`<div id="cardBody">`).addClass("card-body justify-content-center py-2");
 
     let cardTitle = $(`<div id="cardTitle">`).addClass("card-title");
 
@@ -35,7 +53,7 @@ let forecastFunction = function (forecastData) {
     // let dateTime = d.setUTCSeconds(forecastData[i].dt);
     console.log(d);
 
-    cardTitle.text(d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear());
+    cardTitle.text((d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear());
     let cardTemp = $(`<div id="cardTemp">`).addClass("card-temp");
     cardTemp.text("Temp:" + forecastData[i].temp.max + "°F");
 
@@ -44,10 +62,10 @@ let forecastFunction = function (forecastData) {
 
     var iconCode = forecastData[i].weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
-
+    console.log('iconurl', iconUrl);
     let iconImg = $(`<img id="icon" src="" alt="weather icon">`);
-    
     $('#icon').attr('src', iconUrl);
+    // document.querySelector('#icon'+i).setAttribute('src', iconUrl);
 
     let cardWind = $(`<div id="cardWind">`).addClass("card-wind");
     cardWind.text("Wind:" + forecastData[i].wind_speed);
@@ -92,17 +110,23 @@ var fetchWeather = function (location) {
       console.log("weather", data);
 
       forecastFunction(data.daily);
+
+      currentFunction(data.current);
       //after this we render the current weather and forecast.
     });
 };
 
+localStorage.setItem('city', searchValue);
+
 // create renderweather function
 
-// inside the function, create a card that displays the city, current date, and weather icon
+// let renderWeather = function (currentData) {
+//   console.log(currentData);
+// }
+// renderweather();
+// inside the ;function, create a card that displays the city, current date, and weather icon
 // display the temp wind humidity and uv index with dynamic color changing based on uv index
-// var renderWeather = function () {
 
-// };
 
 //create renderforecast function
 //inside the function, create forloop to dynamically create bootstrap cards
