@@ -63,8 +63,9 @@ let forecastFunction = function (forecastData) {
     var iconCode = forecastData[i].weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
     console.log('iconurl', iconUrl);
-    let iconImg = $(`<img id="icon" src="" alt="weather icon">`);
-    $('#icon').attr('src', iconUrl);
+    let iconImg = $(`<img id="icon-${i}" src="${iconUrl}" alt="weather icon">`);
+    // $(`#icon-${i}`).attr('src', iconUrl);
+    console.log(iconImg);
     // document.querySelector('#icon'+i).setAttribute('src', iconUrl);
 
     let cardWind = $(`<div id="cardWind">`).addClass("card-wind");
