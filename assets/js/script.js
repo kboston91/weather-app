@@ -1,9 +1,18 @@
 var forecastDiv = document.querySelector(".five-day");
-
+var cityHistory = JSON.parse(localStorage.getItem("city")) || [];
+var citiesEl = document.querySelector("#history");
+// get history div
 
 $("#search-button").on("click", function () {
   var searchValue = $("#city-search").val();
   console.log(searchValue);
+  if (!cityHistory.includes(searchValue)){
+    cityHistory.push(searchValue);
+    localStorage.setItem("city", JSON.stringify(cityHistory));
+    
+  };
+
+  $("#five-day").html("");
 
   fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${searchValue}&limit=5&appid=ab19f30213045455e1ed3db1fcc7e2c1`
@@ -17,26 +26,74 @@ $("#search-button").on("click", function () {
     });
 
     
-    renderHistory();
+    renderHistory(searchValue);
 });
+
+// var loadCityHistory = function () {
+//   citiesEl.innerHTML = "";
+//   for (let i = 0; i < cityHistory.length; i++) {
+//     var historyItem = document.createElement("a");
+//     // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"></input>
+//     historyItem.setAttribute("class", );
+//     historyItem.setAttribute("id", "past-city");
+//     historyItem.innerText = cityHistory[i];
+//     var recent = cityHistory[i];
+//     console.log(recent);
+//     citiesEl.append(historyItem);
+//   }
+// };
 
 function renderHistory() {
   // Retrieve the last email and password from localStorage using `getItem()`
-  var city = localStorage.getItem('city');
-  
+ 
+  // citiesEl.innerHTML = "";
 
-  // If they are null, return early from this function
-  if (city === null) {
-    return;
+  // // If they are null, return early from this function
+  // if (cityHistory.length > 0) {
+  //   // either loop through array
+  //     for(let i=0; i<cityHistory.length; i++) {
+  //       return cityHistory[i]
+
+        
+  //     }
+  //   // or display array as it
+    
+
+  //   // modify text content of div to show caityHistory
+  //   var citiesEl = document.querySelector("#history");
+    
+
+  citiesEl.innerHTML = "";
+  for (let i = 0; i < cityHistory.length; i++) {
+    var historyItem = document.createElement("div");
+    // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"></input>
+    historyItem.setAttribute("class", "col my-1 bg-light text-secondary text-capitalize p-0 rounded text-center border");
+    historyItem.setAttribute("id", "past-city");
+    var historyContent = document.createElement("p");
+    historyContent.setAttribute("class", "justify-content-center");
+    // history.Content.setAttribute("id", "history");
+    historyItem.innerText = cityHistory[i];
+    var recent = cityHistory[i];
+    console.log(recent);
+    historyContent.append(historyItem);
+    citiesEl.append(historyContent);
   }
 
+
+  
+
   // Set the text of the 'userEmailSpan' and 'userPasswordSpan' to the corresponding values from localStorage
-  history.textContent = city;
+  // history.textContent = city;
+  
+
   
 };
+console.log(cityHistory);
+renderHistory();
 
 let forecastFunction = function (forecastData) {
   for (let i = 0; i < 5; i++) {
+   
     let colDiv = $(`<div id="colDiv">`).addClass("col my-1 p-1");
 
     let cardDiv = $(`<div id="cardDiv">`)
@@ -91,7 +148,9 @@ let forecastFunction = function (forecastData) {
     colDiv.append(cardDiv);
 
     $("#five-day").append(colDiv);
+    
   }
+  
 };
 
 //main card container
@@ -117,7 +176,7 @@ var fetchWeather = function (location) {
     });
 };
 
-localStorage.setItem('city', searchValue);
+
 
 // create renderweather function
 
