@@ -12,9 +12,11 @@ $("#search-button").on("click", function () {
     localStorage.setItem("city", JSON.stringify(cityHistory));
     
   };
-
+  $("#current-weather").html("");
   $("#five-day").html("");
-  $("current-weather").html("");
+  
+  
+  
 
   fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${searchValue}&limit=5&appid=ab19f30213045455e1ed3db1fcc7e2c1`
@@ -78,8 +80,7 @@ function renderHistory() {
     
     historyContent.append(historyItem);
     citiesEl.append(historyContent);
-  }
-
+  };
 
   
 
@@ -93,51 +94,54 @@ console.log(cityHistory);
 // renderHistory();
 
 let currentFunction = function(forecastData) {
-  colDiv2 = $(`<div id="colDiv2">`).addClass("col my-1 p-1");
 
+  var cityName = $("#city-search").val();
+  colDiv2 = $(`<div id="colDiv2">`).addClass("col my-1 p-1");
+  console.log(forecastData);
     let cardDiv2 = $(`<div id="cardDiv2">`)
-      .addClass("card border col bg-secondary")
+      .addClass("card border col")
       .css({ height: "200px" });
 
     let cardBody2 = $(`<div id="cardBody2">`).addClass("card-body justify-content-center py-2");
 
-    let cardTitle2 = $(`<div id="cardTitle2">`).addClass("card-title");
+    let cardTitle2 = $(`<div id="cardTitle2">`).addClass("card-title text-capitalize text-bold");
 
     // let cardImage = $(`div id="cardImage">`).addClass("card-image");
 
-    var d = new Date(forecastData[i].dt * 1000); // The 0 there is the key, which sets the date to the epoch
+    var d = new Date(forecastData.dt * 1000); // The 0 there is the key, which sets the date to the epoch
     // let dateTime = d.setUTCSeconds(forecastData[i].dt);
     console.log(d);
 
-    cardTitle2.text((d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear());
-    let cardTemp2 = $(`<div id="cardTemp2">`).addClass("card-temp");
-    cardTemp2.text("Temp:" + forecastData[i].temp.max + "°F");
+    // cardTitle2.text((d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear());
+    cardTitle2.text( `${cityName} ` + (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear());
+    let cardTemp2 = $(`<div id="cardTemp2">`).addClass("card-temp text-bold");
+    cardTemp2.text("Temp: " + forecastData.temp + "°F");
 
     let cardIcon2 = $(`<div id="cardIcon2">`).addClass("card-icon");
-    cardIcon2.val(forecastData[i].weather[0].icon);
+    cardIcon2.val(forecastData.weather[0].icon);
 
-    var iconCode = forecastData[i].weather[0].icon;
+    var iconCode = forecastData.weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
     console.log('iconurl', iconUrl);
-    let iconImg = $(`<img id="icon-${i}" src="${iconUrl}" alt="weather icon">`);
+    let iconImg = $(`<img id="icon" src="${iconUrl}" alt="weather icon">`);
     // $(`#icon-${i}`).attr('src', iconUrl);
     console.log(iconImg);
     // document.querySelector('#icon'+i).setAttribute('src', iconUrl);
 
     let cardWind2 = $(`<div id="cardWind2">`).addClass("card-wind");
-    cardWind2.text("Wind:" + forecastData[i].wind_speed);
+    cardWind2.text("Wind: " + forecastData.wind_speed);
 
     let cardHumidity2 = $(`<div id="cardHumidity2">`).addClass("card-humidity");
-    cardHumidity2.text("Humidity:" + forecastData[i].humidity);
+    cardHumidity2.text("Humidity: " + forecastData.humidity);
 
     let cardUV2 = $(`<div id="cardUV2">`).addClass("card-uv");
-    cardUV2.text("UV Index:" + forecastData[i].uvi);
+    cardUV2.text("UV Index: " + forecastData.uvi);
     // let eventImageEl = $(`<img id="eventImg-5">`).addClass('card-img');
     // eventImageEl.attr('src', eventImgUrl);
     cardBody2.append(cardTitle2);
     cardIcon2.append(iconImg);
     cardBody2.append(cardIcon2);
-    cardBody2.append(cardTemp);
+    cardBody2.append(cardTemp2);
     cardBody2.append(cardWind2);
     cardBody2.append(cardHumidity2);
     cardBody2.append(cardUV2);
@@ -231,13 +235,12 @@ var fetchWeather = function (location) {
 
       forecastFunction(data.daily);
 
-      currentFunction(data);
+      currentFunction(data.current);
       //after this we render the current weather and forecast.
     });
 };
 
 
-currentFunction();
 // create renderweather function
 
 // let renderWeather = function (currentData) {
