@@ -100,11 +100,11 @@ let currentFunction = function(forecastData) {
   console.log(forecastData);
     let cardDiv2 = $(`<div id="cardDiv2">`)
       .addClass("card border col")
-      .css({ height: "200px" });
+      .css({ height: "275px" });
 
     let cardBody2 = $(`<div id="cardBody2">`).addClass("card-body justify-content-center py-2");
 
-    let cardTitle2 = $(`<div id="cardTitle2">`).addClass("card-title text-capitalize text-bold");
+    let cardTitle2 = $(`<div id="cardTitle2">`).addClass("card-title text-capitalize h3");
 
     // let cardImage = $(`div id="cardImage">`).addClass("card-image");
 
@@ -134,8 +134,20 @@ let currentFunction = function(forecastData) {
     let cardHumidity2 = $(`<div id="cardHumidity2">`).addClass("card-humidity");
     cardHumidity2.text("Humidity: " + forecastData.humidity);
 
-    let cardUV2 = $(`<div id="cardUV2">`).addClass("card-uv");
+    let cardUV2 = $(`<div id="cardUV2">`).addClass("");
     cardUV2.text("UV Index: " + forecastData.uvi);
+
+    
+
+    if(forecastData.uvi <= 2){
+      cardUV2.addClass('bg-success col-2');
+   }else if(forecastData.uvi > 2 && forecastData.uvi < 6){
+    cardUV2.addClass('bg-warning col-2');
+   }else if(forecastData.uvi >= 6 && forecastData.uvi < 8){
+    cardUV2.addClass('bg-warning col-2');
+   }else if(forecastData.uvi >= 8){
+    cardUV2.addClass('bg-dark text-danger col-2');
+   };
     // let eventImageEl = $(`<img id="eventImg-5">`).addClass('card-img');
     // eventImageEl.attr('src', eventImgUrl);
     cardBody2.append(cardTitle2);
